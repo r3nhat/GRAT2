@@ -1,0 +1,8 @@
+C:\Users\Dev\Desktop\C# Projects\GRAT2\GRAT2_Client\bin\Debug\GRAT2_Client.exe
+C:\Users\Dev\Desktop\C# Projects\GRAT2\GRAT2_Client\bin\Debug\GRAT2_Client.pdb
+C:\Users\Dev\Desktop\C# Projects\GRAT2\GRAT2_Client\bin\Debug\System.Management.Automation.dll
+C:\Users\Dev\Desktop\C# Projects\GRAT2\GRAT2_Client\obj\Debug\GRAT2_Client.csprojAssemblyReference.cache
+C:\Users\Dev\Desktop\C# Projects\GRAT2\GRAT2_Client\obj\Debug\GRAT2_Client.csproj.CoreCompileInputs.cache
+C:\Users\Dev\Desktop\C# Projects\GRAT2\GRAT2_Client\obj\Debug\GRAT2_Client.csproj.CopyComplete
+C:\Users\Dev\Desktop\C# Projects\GRAT2\GRAT2_Client\obj\Debug\GRAT2_Client.exe
+C:\Users\Dev\Desktop\C# Projects\GRAT2\GRAT2_Client\obj\Debug\GRAT2_Client.pdb

