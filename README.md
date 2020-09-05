@@ -40,7 +40,7 @@ Communication:
 
 Modules:
 
-- **uac** - Attempt to bypass UAC using silent disk clean-up and Parent PID Spoofing technique.
+- **uac** - Attempt to bypass UAC using silent disk clean-up with Parent PID Spoofing technique.
 - **maketoken** - Remove the current token and create a new one using the given credentials (Domain or Local).
 - **revtoself** - Remove the current token.
 - **stealtoken** - Attempt to steal a token from a running process and impersonate user (Administrator rights is required).
@@ -97,12 +97,23 @@ TODO:
   
   **NOTE** if you change either initialUrl or sendResults string, you have to update the string under [GRAT2_Server/handlers.py](/GRAT2_Server/handlers.py#L42) on line 42 and 78 respectively.
 
+## Usage:
+
+- Open GRAT2 Client (GRAT2_Client.sln) project using Visual Studio, change the solution configuration from Debug to Release and then Build Solution.
+- Start GRAT2 Server:
+![GRAT2 Start Server](/images/start_server.PNG)
+- Run GRAT2 Client executable - GRAT2_Client\bin\Release\GRAT2_Client.exe
+- Interact with the agent:
+![GRAT2 Interact](/images/interact_agent.PNG)
+
 ## Credits:
 
 * Donut - [@TheRealWover](https://twitter.com/TheRealWover)
 * DInvoke - [@TheRealWover](https://twitter.com/TheRealWover) & [@FuzzySec](https://twitter.com/FuzzySec)
 * SharpC2 - [@_RastaMouse](https://twitter.com/_RastaMouse) & [@_xpn_](https://twitter.com/_xpn_)
 * SharpSploit - [@cobbr_io](https://twitter.com/cobbr_io)
+
+Also, acknowledgment for each author and the reference link is highlighted in the source code.
 
 ## Disclaimer:
 

