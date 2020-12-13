@@ -13,6 +13,15 @@ class Encryption():
             return enc
         return xored
 
+    def fromBase64URL(self, msg):
+        msg = msg.replace('_','/').replace('-','+')
+        if len(msg)%4 == 3:
+            return base64.b64decode(msg + '=')
+        elif len(msg)%4 == 2:
+            return base64.b64decode(msg + '==')
+        else:
+            return base64.b64decode(msg)
+
     def RC4Crypt(self, data):
         # http://entitycrisis.blogspot.com/2011/04/encryption-between-python-and-c.html?m=1
         key = b'password'

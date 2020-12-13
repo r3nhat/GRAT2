@@ -6,7 +6,7 @@ namespace GRAT2_Client.PInvoke
 {
     class Tasks
     {
-        public static List<String> ValidArguments = new List<string> { "caretrun", "uac", "maketoken", "revtoself", "stealtoken", "dynamic_injectcrt", "ppid_processhollow", "processhollow", "injectppidapc", "injectcrt", "injectapc", "rportfwd", "whoami", "hostname", "domain", "screenshot", "download", "upload", "cd", "run", "sleep", "exit", "shell", "powershell", "powerscript", "executeassembly", "ps", "pwd", "ls", "pid" };
+        public static List<String> ValidArguments = new List<string> { "localip", "caretrun", "uac", "maketoken", "revtoself", "stealtoken", "dynamic_injectcrt", "ppid_processhollow", "processhollow", "injectppidapc", "injectcrt", "injectapc", "rportfwd", "whoami", "hostname", "domain", "screenshot", "download", "upload", "cd", "run", "sleep", "exit", "shell", "powershell", "powerscript", "executeassembly", "ps", "pwd", "ls", "pid" };
         static public string Run(string[] args)
         {
             var methodName = args[0];
@@ -74,6 +74,8 @@ namespace GRAT2_Client.PInvoke
                     return Tokens_UAC.UAC_Bypass.Disk(args);
                 case "caretrun":
                     return Execute.RunCmd(args);
+                case "localip":
+                    return Execute.getLocalIP();
                 default:
                     break;
             }

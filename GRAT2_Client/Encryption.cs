@@ -30,10 +30,17 @@ namespace GRAT2_Client.PInvoke
             return Base64Encode(r1);
 
         }
-        private static string Base64Encode(string plainText)
+        public static string Base64Encode(string plainText)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
             return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string ToBase64URL(byte[] data)
+        {
+            string result = String.Empty;
+            result = Convert.ToBase64String(data).Replace("=", "").Replace("/", "_").Replace("+", "-");
+            return result;
         }
 
         //https://www.codeproject.com/Articles/769741/Csharp-AES-bits-Encryption-Library-with-Salt

