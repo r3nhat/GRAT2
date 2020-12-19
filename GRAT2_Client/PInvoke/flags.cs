@@ -226,6 +226,14 @@ namespace GRAT2_Client.PInvoke
 
         #region DNSFlags
 
+        public struct IP4_ARRAY
+        {
+            /// DWORD->unsigned int
+            public UInt32 AddrCount;
+            /// IP4_ADDRESS[1]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1, ArraySubType = UnmanagedType.U4)] public UInt32[] AddrArray;
+        }
+
         [StructLayout(LayoutKind.Sequential)]
         public struct TXTRecord
         {
